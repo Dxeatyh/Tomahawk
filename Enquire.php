@@ -1,13 +1,17 @@
 <?PHP
-header('Content-Type: application/json');
-$data = file_get_contents('php://input');
 session_start();
 
-if(strlen($data) > 1){
+header('Content-Type: application/json');
+$data = file_get_contents('php://input');
 
-    $_SESSION["newsession"] = $data;
+
+if(strlen($data) > 1){
+    $_SESSION["json_data"] = $data;
     echo $data;
 }else{
-    $json = json_encode(json_decode($_SESSION["newsession"]), JSON_PRETTY_PRINT);
-    echo $json;
+    if(isset($_SESSION['json_data'])){
+        echo json_encode(json_decode($_SESSION["json_data"]), JSON_PRETTY_PRINT);
+    }else{
+        echo '{ "error" : "I\'m using sessions and it seems that the server does not support my method"}';
+    }
 }

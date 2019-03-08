@@ -180,7 +180,7 @@ if(isset($RoomNameRequested)){
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="GenList" class="Search" action="Enquire.php" method="post">
+            <form id="GenList" class="Search" action="enquire.php" method="post">
 
                 <div class="modal-body mx-3">
 
@@ -232,7 +232,41 @@ if(isset($RoomNameRequested)){
         </div>
     </div>
 </div>
+<script>
+    $('#GenList').on('submit', function () {
+    // room_id --- rooms do not have id's on json file, unless i i create my own?
+    // This Post and Redirect is to get the exact json layout as per example
+    // else i would have done a simple javascrpt alert array;
 
+    // the price i'm not sure if the rooms are per guest or per room;
+    // so the pricing is based on per room;
+
+    var JsonToPost = {
+        "room_id": 1234,
+        "arrival_date": BookedFrom,
+        "nights": selectedCount,
+        "total-rate": TotalPrice,
+        "guest_firstname": $("#guest_firstname").val(),
+        "guest_lastname": $("#guest_lastname").val(),
+        "guest_email": $("#guest_email").val()
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "enquire.php",
+        data: JSON.stringify(JsonToPost),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            window.location.href = 'enquire.php';
+        },
+        failure: function (errMsg) {
+            alert(errMsg);
+        }
+    });
+    return false;
+});
+</script>
 <?PHP
 }
 
